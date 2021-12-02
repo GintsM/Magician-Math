@@ -1,0 +1,34 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "text": "Say something nice",
+      "day": "Nov 30 at 10:00am",
+      "reminder": false
+    },
+    {
+      "id": 3,
+      "text": "Dinner with Cat",
+      "day": "Nov 31 at 7:00pm",
+      "reminder": false
+    },
+    {
+      "text": "Take a break",
+      "day": "16.00",
+      "reminder": true,
+      "id": 4
+    },
+    {
+      "text": "One more task",
+      "day": "Later 11.00",
+      "reminder": false,
+      "id": 5
+    },
+    {
+      "text": "Eat greek Cheese",
+      "day": "New Years Eve 23.00",
+      "reminder": true,
+      "id": 6
+    }
+  ]
+}
