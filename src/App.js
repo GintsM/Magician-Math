@@ -3,13 +3,17 @@ import Tasks from './components/tasks'
 import { useState, useEffect } from 'react'
 import AddTask from './components/AddTask'
 
-// I can import thing to this file and use as variables
 function App() {
   const[showTask, setShowTask] = useState(false)
   const [tasks, setTasks] = useState([])
 
   const fetchTasks = async() => {
-    const response = await fetch('http://localhost:3004/api/tasks')
+    const response = await fetch('http://localhost:5000/tasks')
+    return response.json()
+  }
+
+  const fetchRemind = async(id) => {
+    const response = await fetch(`http://localhost:5000/tasks/${id}`)
     return response.json()
   }
 
@@ -21,9 +25,8 @@ function App() {
     getTasks()
   })
 
-
   const addTask = async(task) => {
-    const response = await fetch(`http://localhost:3004/api/tasks`, {
+    const response = await fetch(`http://localhost:5000/tasks`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -32,35 +35,31 @@ function App() {
     })
 
     const newTask = await response.json()
-
-    setTasks([...tasks, newTask])
-    // const id = Math.floor(Math.random()*100)+1;
-    // const newTask = { id, ...task };
-    // setTasks([...tasks, newTask])    
+    setTasks([...tasks, newTask])   
   }
 
-  //event check for delete
   const deleteTask = async(id) => {
-    await fetch(`http://localhost:3004/api/tasks/${id}`, {
+    await fetch(`http://localhost:5000/tasks/${id}`, {
       method: 'DELETE'
     })
     setTasks(tasks.filter((task) => task.id !== id))
+    console.log(tasks)
   }
 
   const remainder = async(id) => {
-    const taskRemaind = await fetch(`http://localhost:3004/api/tasks/${id}`)
+    const taskRemaind = await fetchRemind(id);
     const updateReminder = {...taskRemaind, reminder: !taskRemaind.reminder}
-    const response = await fetch(`http://localhost:3004/api/tasks`, {
-      method: 'POST',
+    const response = await fetch(`http://localhost:5000/tasks/${id}`, {
+      method: 'PUT',
       headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify(updateReminder)
     })
-    setTasks(tasks.map((task) => task.id === id ? {...task, reminder: response.json().reminder} : task))
+
+    const data = await response.json();
+    setTasks(tasks.map((task) => task.id === id ? {...task, reminder: data.reminder} : task))
   }
-
-
 
   return (
     <div className="container">
@@ -70,6 +69,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;
